@@ -1,0 +1,16 @@
+html
+	head
+		title Profile
+		link(rel="stylesheet", href="../css/style.css")
+	body
+		div.container
+			header
+				a#logout(href="/logout") Logout
+				a(href="/") Home
+				a(href="/viewall") View All Posts
+				a(href="/myposts") View My Posts
+				a(href="/newpost") Create A New Post
+			main
+				h1 #{user.username}
+				br
+				img(src="../gifs/flo.gif" alt="Bloom")

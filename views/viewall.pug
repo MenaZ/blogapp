@@ -1,0 +1,34 @@
+html
+	head
+		title View All Posts
+		
+	body
+		div.container
+			header
+				a#logout(href="/logout") Logout
+				a(href="/") Home
+				a(href="/profile") My Profile
+				a(href="/myposts") View My Posts
+				a(href="/newpost") Create A New Post
+			main
+				h1 Look at these here beautiful posts!
+				div.postcontainer
+					each post in posts
+						each user in users
+							if post.userId == user.id
+								p.postTitle 
+									strong #{user.username} wrote "#{post.title}"
+								p.postBody #{post.body}
+								div.commentBox
+								each comment in post.comments
+									each user in users
+										if comment.userId == user.id
+											p.comment 
+												strong 
+													i  #{user.username} commented: 
+												|	#{comment.body}
+								form#commentform(method="POST" action="/comment")
+									textarea.commentArea(type="text" name="comment" placeholder="My nice comment..." maxlength="30" required)
+									input(type='hidden' name='postId' value=post.id)
+									input.commentbutton(type="submit" name="submit" value="Comment!")
+								br

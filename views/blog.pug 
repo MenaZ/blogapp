@@ -1,0 +1,14 @@
+
+html
+	head
+		title Homepage
+			
+	body
+		div.container
+			h1 Bonjour and welcome to this blog app
+			p Login now
+			a(href="/login") Login
+		
+			p Register a new account
+			a(href="/register") Register
+		

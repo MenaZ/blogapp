@@ -1,7 +1,6 @@
 {
   "name": "blogapp",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,5 +13,15 @@
     "express-session": "^1.15.3",
     "pug": "^2.0.0-rc.2",
     "sequelize": "^4.1.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MenaZ/blogapp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MenaZ/blogapp/issues"
+  },
+  "homepage": "https://github.com/MenaZ/blogapp#readme",
+  "description": ""
 }

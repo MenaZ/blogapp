@@ -1,0 +1,28 @@
+html 
+	head
+		title CreateUser
+	body 	
+		header
+				a(href="/") Home
+
+		h1 Create your profile
+		br
+			h4 Fill in the form below
+
+		form#createUSer(method='post' action ='/createUser')		
+			p Username:	
+				input(type= "text", name ="username" placeholder="Your Username" minlength="2" required)
+			p First name:
+		 		input(type= 'text',name= 'firstname' placeholder="Your First Name" minlength="2" required)		
+		 	p Last name:
+		 		input(type= 'text', name= ' lastname' placeholder="Your Last Name " minlength="2" required)
+			p Email:
+				input(type= 'text', name= ' email' placeholder="Your Email Address " minlength="2" required)
+			p Password:
+				input(type= 'text', name= 'password' placeholder="Your Password" minlength="2" required)
+			p Confirm Password:
+				input(type= 'text', name= ' lastname' placeholder="Confirm Password " minlength="2" required)
+
+
+	
+			

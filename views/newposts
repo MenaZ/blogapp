@@ -1,0 +1,22 @@
+html
+	head
+		title Post new message
+		
+	body
+		div.container
+			header
+				a#logout(href="/logout") Logout
+				a(href="/") Home
+				a(href="/profile") My Profile
+				a(href="/viewall") View All Posts
+				a(href="/myposts") View My Posts
+			main
+				h3 Create a new post:
+				br
+				form#newPostForm(method="POST" action="/newpost")
+					input.title(type="text" name="title" placeholder="My nice title..." maxlength="30" required)
+					br
+					textarea.body(type="text" name="body" placeholder="My nice message..." maxlength="140" required)
+					br
+					br
+					input.postbutton(type="submit" name="submit" value="Post!")

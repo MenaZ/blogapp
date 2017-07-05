@@ -1,0 +1,15 @@
+html
+	head
+		title Login here :-)
+		
+	body
+		div.container
+			header
+				a(href="/") Home
+				a(href="/register") Register
+			main
+				h1 Login now!
+				form(method="post" action="/login")
+						input.username(type="text" name="username" placeholder="Your Username" required)
+						input.username(type="password" name="password" placeholder="Your Password" required)
+						input.loginbutton(type="submit" value="Login!")

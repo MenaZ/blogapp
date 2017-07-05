@@ -1,7 +1,8 @@
-const app = require('express')();
+const express = require('express');
+const app = express();
 const Sequelize = require('sequelize');
 const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser'());
+const bodyParser = require('body-parser');
 const session = require('express-session');
 const db = new Sequelize('nodeblog',process.env.POSTGRES_USER,
 	process.env.POSTGRES_PASSWORD, {
@@ -21,7 +22,7 @@ app.set('view engine', 'pug');
 
 // create session
 app.use(session({
-  secret: '',
+  secret: 'moon',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: true }
@@ -51,16 +52,21 @@ var User = db.define('user', {
 	
 });     
 
-var Message = db.define('message', {
+var Message = db.define('post', {
 	 	title: {
           type: Sequelize.STRING,
-         }
-	 	message: Sequelize.STRING
-})
+        },
+      body: {
+	 	message: Sequelize.TEXT,
+	 	unique:true
+	 }
+});
 
 var Comment =db.define('comment', {
+	body: {
 			comment: Sequelize.STRING
-})
+	}
+});
 
 
 // establishing relationships
@@ -75,10 +81,9 @@ db.sync();
 
 //routes
 //homepage route
-app.get('/', (response,request)=> {
-	response.render('blog')
-
-}
+app.get('/blog', (response,request)=> {
+	response.render('blog');
+})
 
 
 app.post('/createUser', (response,request)=> {
@@ -93,11 +98,11 @@ app.post('/createUser', (response,request)=> {
 		password: request.body.email // bcrypt.hash
 	    })
 	 })
-	 response.redirect('/login')  
+	 response.redirect('/createUSer')  
 
 	 //Login page
 app.get('/login', (response, request) => {
-	res.render('login');		
+	response.render('login');		
 });
 
 app.post('/login', (response, request) => {
@@ -116,12 +121,12 @@ app.post('/login', (response, request) => {
 					res.redirect('/profile');
 				} 
 				else {
-					res.redirect('/login?message=' + encodeURIComponent("Username or Password Invalid."));
+					response.redirect('/login?message=' + encodeURIComponent("Username or Password Invalid."));
 				}
 			});
 		})
 		.catch((error) => {
-			res.redirect('/?message=' + encodeURIComponent('Error Has Occurred, Check The Server.'));
+			response.redirect('/?message=' + encodeURIComponent('Error Has Occurred, Check The Server.'));
 		});
 });
 
@@ -129,11 +134,11 @@ app.post('/login', (response, request) => {
 app.get('/profile', (response, request) => {
 	var user = req.session.user;
     if (user === undefined) {				//only accessible for logged in users
-        res.redirect('/login?message=' + encodeURIComponent("Log In To View Profile."));
+        response.redirect('/login?message=' + encodeURIComponent("Log In To View Profile."));
     } else {
-        res.render('profile', {
+        response.render('profile'), {
             user: user
-        });
+        };
     }
 });
 
@@ -141,7 +146,7 @@ app.get('/profile', (response, request) => {
 app.get('/myposts', (response, request) => {
 	var user = req.session.user;
     if (user === undefined) {				//only accessible for logged in users
-        res.redirect('/login?message=' + encodeURIComponent("Log In To View Your Posts."));
+        response.redirect('/login?message=' + encodeURIComponent("Log In To View Your Posts."));
         return;
     } else {
     	User.findAll()
@@ -156,7 +161,7 @@ app.get('/myposts', (response, request) => {
 					}]
 			})
 			.then((posts) => {
-				res.render('myposts', {
+				response.render('myposts', {
 					users: users, 
 					posts: posts
 				})
@@ -164,7 +169,7 @@ app.get('/myposts', (response, request) => {
     	})
 		.catch((error) => {
 			console.log('Error Occured', error);
-			res.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
+			response.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
 		});
 	}
 });
@@ -172,26 +177,26 @@ app.get('/myposts', (response, request) => {
 //Create a new post page
 app.get('/newpost', (response,request) => {
 	var user = req.session.user;
-    if (user === undefined) {				//only accessible for logged in users
-        res.redirect('/login?message=' + encodeURIComponent("Please log in to create a new post."));
+    if (user === undefined) {				
+        response.redirect('/login?message=' + encodeURIComponent("Please log in to create a new post."));
     } else {
-    	res.render('newpost');
+    	response.render('newpost');
     }
 })
 
 app.post('/newpost', (response, request) => {				
 	var user = req.session.user;
-	Post.create({						//sync to database for input new row Post
+	Post.create({						
 		title: req.body.title,
 		body: req.body.body,
-		userId: user.id || 0 //if it does not exist it is a 0, which means something is wrong
+		userId: user.id || 0 //if doesnt exist it says 0
 		})
 	.then(() => {
-			res.redirect('/myposts');
+			response.redirect('/myposts');
 	})
 	.catch((error) => {
 			console.log('Error Occured', error);
-			res.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
+			response.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
 	});
 });
 
@@ -200,7 +205,7 @@ app.post('/newpost', (response, request) => {
 app.get('/viewall', (response, request) => {
 	var user = req.session.user;
 	if (user === undefined) {				//only accessible for logged in users
-        res.redirect('/login?message=' + encodeURIComponent("Please log in to view all posts."));
+        response.redirect('/login?message=' + encodeURIComponent("Please log in to view all posts."));
     } else {
     	User.findAll()			//find User and Post data for use in /viewall
     	.then((users) => {
@@ -211,7 +216,7 @@ app.get('/viewall', (response, request) => {
     			}]
     		})
 			.then((posts) => {
-					res.render('viewall', {
+					response.render('viewall', {
 						posts: posts,
 						users: users,
 					})
@@ -219,7 +224,7 @@ app.get('/viewall', (response, request) => {
     	})
 		.catch((error) => {
 			console.log('Error Occured', error);
-			res.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
+			response.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
 		});
 	}
 });
@@ -239,18 +244,18 @@ app.post('/comment', (response, request) => {
 				userId: user.id
 			})
 		.then(() => {
-				res.redirect('/viewall');
+				response.redirect('/viewall');
 			})
 		})
 	.catch((error) => {
 			console.log('Error Occured!', error);
-			res.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
+			response.redirect('/?message=' + encodeURIComponent('Error Occured Check The Server.'));
 	})
 });
 
 //Log out route that redirects to home
 app.get('/logout', (response, request) => {
-	req.session.destroy(function(error) {			//destroy session after logout
+	request.session.destroy(function(error) {			//destroy session after logout
 		if(error) {
 			throw error;
 		}
@@ -266,4 +271,4 @@ const server = app.listen(3000, () => {
 });
 
 
-}
+})
