@@ -11,7 +11,7 @@ html
 				a(href="/myposts") View My Posts
 				a(href="/newpost") Create A New Post
 			main
-				h1 Look at these here beautiful posts!
+				h1 All posts!
 				div.postcontainer
 					each post in posts
 						each user in users
@@ -28,7 +28,7 @@ html
 													i  #{user.username} commented: 
 												|	#{comment.body}
 								form#commentform(method="POST" action="/comment")
-									textarea.commentArea(type="text" name="comment" placeholder="My nice comment..." maxlength="30" required)
+									textarea.commentArea(type="text" name="comment" placeholder="Comment" maxlength="30" required)
 									input(type='hidden' name='postId' value=post.id)
 									input.commentbutton(type="submit" name="submit" value="Comment!")
 								br

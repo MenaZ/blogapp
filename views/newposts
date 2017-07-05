@@ -14,9 +14,9 @@ html
 				h3 Create a new post:
 				br
 				form#newPostForm(method="POST" action="/newpost")
-					input.title(type="text" name="title" placeholder="My nice title..." maxlength="30" required)
+					input.title(type="text" name="title" placeholder="Title..." maxlength="30" required)
 					br
-					textarea.body(type="text" name="body" placeholder="My nice message..." maxlength="140" required)
+					textarea.body(type="text" name="body" placeholder="Message..." maxlength="140" required)
 					br
 					br
 					input.postbutton(type="submit" name="submit" value="Post!")
